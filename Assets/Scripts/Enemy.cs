@@ -17,11 +17,14 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float SideAttackSpeed = 6f;
 
+    private Rigidbody[] rBodyInChildren;
+
     private SoundController soundController;
 
     private float ShootTimer = 0;
     private float ChooseSide;
     private bool SideAttacker = false;
+    private bool Alive = true;
 
     void Start()
     {
@@ -30,16 +33,18 @@ public class Enemy : MonoBehaviour
 
         if (Random.Range(0, 10) > 7)
             Invoke(nameof(InvokeSideAttack), Random.Range(4, 15));
+
+        rBodyInChildren = GetComponentsInChildren<Rigidbody>();
     }
 
     void Update()
     {
         ShootTimer -= Time.deltaTime;
 
-        if (ShootTimer < 0)
+        if (ShootTimer < 0 && Alive)
             Shoot();
 
-        if (SideAttacker)
+        if (SideAttacker && Alive)
             SideAttack();
     }
 
@@ -71,11 +76,23 @@ public class Enemy : MonoBehaviour
         SideAttacker = true;
     }
 
+    private void Deasamble()
+    {
+        foreach (Rigidbody body in rBodyInChildren)
+        {
+            body.constraints = RigidbodyConstraints.None;
+            body.isKinematic = false;
+            body.AddForce(new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), Random.Range(-3, 3)),ForceMode.Impulse);
+        }
+    }
+
     public void Destraction()
     {
+        Alive = false;
+        Deasamble();
         soundController.Play("Defeat");
         GameController.Instance.EnemyDeath();
-        Destroy(gameObject,0.5f);
+        Destroy(gameObject, 1.5f);
     }
 
     public void OutOfBounds()

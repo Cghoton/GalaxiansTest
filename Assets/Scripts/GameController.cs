@@ -32,9 +32,10 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         if(EnemiesInGame < 3)
-        {
             enemySpawner.InitializeEnemyWallSpawn(Random.Range(5,25));
-        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
     }
     
     public void EnemyOut()
