@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         if (!PlayerBullet)
-            transform.LookAt(GameObject.FindGameObjectWithTag("Player").transform.position + playerOffset);
+            transform.LookAt(GameController.Instance.GetPlayerPos() + playerOffset);
 
         Destroy(gameObject, TimeToDestroy);
     }
@@ -30,12 +30,14 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") && PlayerBullet)
+        var enemyScript = other.GetComponent<Enemy>();
+
+        if (PlayerBullet && enemyScript != null && enemyScript.AliveStatus())
         {
             other.GetComponent<Enemy>().Destraction();
             Destroy(gameObject);
         }
-        else if (other.CompareTag("Player") && !PlayerBullet)
+        else if (other.GetComponent<PlayerController>() != null && !PlayerBullet)
         {
             GameController.Instance.EndOfGame();
         }

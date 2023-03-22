@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && Alive)
             GameController.Instance.EndOfGame();
     }
 
@@ -99,5 +99,10 @@ public class Enemy : MonoBehaviour
     {
         GameController.Instance.EnemyOut();
         Destroy(gameObject);
+    }
+
+    public bool AliveStatus()
+    {
+        return Alive;
     }
 }

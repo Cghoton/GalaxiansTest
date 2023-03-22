@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
         shootingCooldownTimer -= Time.deltaTime;
 
-        if (Input.GetButtonDown("Fire1") && shootingCooldownTimer < 0)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && shootingCooldownTimer < 0)
         {
             soundController.Play("Shot");
             SpawnBullet();

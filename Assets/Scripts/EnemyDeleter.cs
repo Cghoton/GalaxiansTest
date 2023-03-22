@@ -4,7 +4,9 @@ public class EnemyDeleter : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
-            other.GetComponent<Enemy>().OutOfBounds();
+        var EnemyScript = other.GetComponent<Enemy>();
+
+        if (EnemyScript != null)
+            EnemyScript.OutOfBounds();
     }
 }

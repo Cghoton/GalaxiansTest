@@ -13,6 +13,9 @@ public class GameController : MonoBehaviour
     private UIController uIController;
 
     [SerializeField]
+    private Transform playerTrans;
+
+    [SerializeField]
     private int EnemiesOnStart = 10;
 
     private float EnemiesInGame = 0;
@@ -22,11 +25,20 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        Instance = this;
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("Multiple Instances");
+            Destroy(gameObject);
+        }
+        
         uIController.SetGoal(Goal);
 
         enemySpawner.InitializeEnemyWallSpawn(EnemiesOnStart);
-        enemySpawner.StartCoroutine("ExtraSpawn");
+        enemySpawner.StartCoroutine(enemySpawner.ExtraSpawn());
     }
 
     private void Update()
@@ -58,6 +70,10 @@ public class GameController : MonoBehaviour
     {
         GetComponent<SoundController>().Play("GameOver");
         uIController.Lose();
+    }
+    public Vector3 GetPlayerPos()
+    {
+        return playerTrans.position;
     }
 
 }
